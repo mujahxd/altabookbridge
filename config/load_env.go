@@ -15,12 +15,12 @@ type Config struct {
 
 func LoadConfig() (config Config, err error) {
 
-	config.DBUser = os.Getenv("DBUSER")
-	config.DBPassword = os.Getenv("DBPASSWORD")
-	config.DBHost = os.Getenv("DBHOST")
-	config.DBPort = os.Getenv("DBPORT")
-	config.DBName = os.Getenv("DBNAME")
-	config.TokenSecret = os.Getenv("JWT")
+	config.DBUser = os.Getenv("DBUser")
+	config.DBPassword = os.Getenv("DBPassword")
+	config.DBHost = os.Getenv("DBHost")
+	config.DBPort = os.Getenv("DBPort")
+	config.DBName = os.Getenv("DBName")
+	config.TokenSecret = os.Getenv("JWT_SECRET")
 
 	return config, nil
 }
