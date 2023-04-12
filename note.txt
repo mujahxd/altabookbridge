@@ -1,0 +1,4 @@
+API bookImage format binary harus diganti menjadil format url (mungkin) biar tidak rancu.
+Sementara saya akan kembalikan dalam bentuk url
+delete book could be not found
+pertanyaan mas irwan
