@@ -1,10 +1,7 @@
 package config
 
 import (
-	"log"
 	"os"
-
-	"github.com/joho/godotenv"
 )
 
 type Config struct {
@@ -13,14 +10,9 @@ type Config struct {
 }
 
 func LoadConfig() (config Config, err error) {
-	err = godotenv.Load()
-	if err != nil {
-		log.Fatal("error loading .env file")
-		return
-	}
 
 	password := os.Getenv("PASSWORD")
-	tokenSecret := os.Getenv("TOKEN_SECRET")
+	tokenSecret := os.Getenv("JWT")
 
 	config.DBPassword = password
 	config.TokenSecret = tokenSecret
