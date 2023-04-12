@@ -1,4 +1,4 @@
-package auth
+package helper
 
 import (
 	"errors"
@@ -10,13 +10,13 @@ import (
 type Service interface {
 	GenerateToken(ID int) (string, error)
 	ValidateToken(token string) (*jwt.Token, error)
-	DecodeToken(token *jwt.Token) (string, error)
+	DecodeToken(token *jwt.Token) string
 }
 
 type jwtService struct {
 }
 
-var SECRET_KEY = []byte(os.Getenv("TOKEN_SECRET"))
+var SECRET_KEY = []byte(os.Getenv("JWT"))
 
 func NewService() *jwtService {
 	return &jwtService{}
@@ -51,13 +51,13 @@ func (s *jwtService) ValidateToken(encodedToken string) (*jwt.Token, error) {
 	return token, nil
 }
 
-func (s *jwtService) DecodeToken(token *jwt.Token) (string, error) {
+func (s *jwtService) DecodeToken(token *jwt.Token) string {
 	if token.Valid {
 		data := token.Claims.(jwt.MapClaims)
 		user_id := data["id"].(string)
 
-		return user_id, nil
+		return user_id
 	}
 
-	return "", err
+	return ""
 }

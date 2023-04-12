@@ -1,4 +1,4 @@
-package utils
+package helper
 
 import (
 	"fmt"
@@ -7,6 +7,7 @@ import (
 )
 
 func HashPassword(password string) (string, error) {
+
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 
 	if err != nil {
