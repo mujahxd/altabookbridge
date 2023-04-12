@@ -8,7 +8,7 @@ type Config struct {
 	DBUser      string
 	DBPassword  string
 	DBHost      string
-	DBPort      int
+	DBPort      string
 	DBName      string
 	TokenSecret string
 }
