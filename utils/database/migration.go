@@ -7,9 +7,9 @@ import (
 )
 
 func Migrate(db *gorm.DB) {
-	books := bookrepo.Book{}
 	users := userrepo.User{}
+	books := bookrepo.Book{}
 
-	db.AutoMigrate(books)
 	db.AutoMigrate(users)
+	db.AutoMigrate(books)
 }
