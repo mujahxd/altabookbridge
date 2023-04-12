@@ -5,17 +5,22 @@ import (
 )
 
 type Config struct {
+	DBUser      string
 	DBPassword  string
+	DBHost      string
+	DBPort      int
+	DBName      string
 	TokenSecret string
 }
 
 func LoadConfig() (config Config, err error) {
 
-	password := os.Getenv("PASSWORD")
-	tokenSecret := os.Getenv("JWT")
-
-	config.DBPassword = password
-	config.TokenSecret = tokenSecret
+	config.DBUser = os.Getenv("DBUSER")
+	config.DBPassword = os.Getenv("DBPASSWORD")
+	config.DBHost = os.Getenv("DBHOST")
+	config.DBHost = os.Getenv("DBPORT")
+	config.DBName = os.Getenv("DBNAME")
+	config.TokenSecret = os.Getenv("JWT")
 
 	return config, nil
 }
