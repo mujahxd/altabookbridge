@@ -13,7 +13,7 @@ type Repository interface {
 }
 
 type UseCase interface {
-	RegisterUser(user Core) (Core, error)
+	RegisterUser(user Core) error
 }
 
 type Handler interface {

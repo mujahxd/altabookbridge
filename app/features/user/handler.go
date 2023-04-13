@@ -5,6 +5,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/mujahxd/altabookbridge/app/features/user/data"
+	"github.com/mujahxd/altabookbridge/helper"
 )
 
 type handler struct {
@@ -21,8 +22,17 @@ func (h *handler) RegisterUser() echo.HandlerFunc {
 		err := c.Bind(&input)
 		if err != nil {
 			c.Logger().Error("error bind: ", err.Error())
-			return c.JSON(http.StatusBadRequest, nil)
+			errors := helper.FormatValidationError(err)
+			errorMessage := echo.Map{"errors": errors}
+			response := helper.APIResponse("Register account failed", http.StatusUnprocessableEntity, "error", errorMessage)
+			return c.JSON(http.StatusUnprocessableEntity, response)
 		}
-		return c.JSON(http.StatusOK, nil)
+		err = h.service.RegisterUser(Core(input))
+		if err != nil {
+			response := helper.APIResponse("Register account failed", http.StatusBadRequest, "error", nil)
+			return c.JSON(http.StatusBadRequest, response)
+		}
+		response := helper.APIResponse("Account has been registered", http.StatusCreated, "success", nil)
+		return c.JSON(http.StatusOK, response)
 	}
 }
