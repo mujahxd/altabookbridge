@@ -53,7 +53,7 @@ func (bc *bookController) DeLeteBookHandler() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		username := helper.DecodeToken(c.Get("user").(*jwt.Token))
 
-		bookID, err := strconv.Atoi(c.Param("bookID"))
+		bookID, err := strconv.Atoi(c.Param("booksID"))
 		if err != nil {
 			response := helper.APIResponse("invalid book ID", http.StatusBadRequest, "error", nil)
 			return c.JSON(http.StatusBadRequest, response)
@@ -149,8 +149,6 @@ func (bc *bookController) AddBookHandler() echo.HandlerFunc {
 	}
 }
 
-//add
-
 func (bc *bookController) GetBookByIDHandler() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		username := helper.DecodeToken(c.Get("user").(*jwt.Token))
@@ -180,6 +178,52 @@ func (bc *bookController) GetBookByIDHandler() echo.HandlerFunc {
 		}
 
 		response := helper.APIResponse("succes to find book by id", http.StatusOK, "succes", result)
+		return c.JSON(http.StatusOK, response)
+	}
+}
+
+func (bc *bookController) UpdateBookHandler() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		username := helper.DecodeToken(c.Get("user").(*jwt.Token))
+		if username == "" {
+			log.Println("unauthorized finding books")
+			response := helper.APIResponse("please login first", http.StatusUnauthorized, "unathorized", nil)
+			return c.JSON(http.StatusUnauthorized, response)
+		}
+		bookID, err := strconv.Atoi(c.Param("booksID"))
+		if err != nil {
+			log.Println("bad request parameter booksid not valid")
+			response := helper.APIResponse("booksID not valid", http.StatusBadRequest, "failed", nil)
+			return c.JSON(http.StatusBadRequest, response)
+		}
+
+		description := c.FormValue("description")
+		title := c.FormValue("title")
+
+		bookImageFile, err := c.FormFile("book_image")
+		if err != nil {
+			log.Println("error occurs on reading form image")
+			response := helper.APIResponse("bad request", http.StatusBadRequest, "error", nil)
+			return c.JSON(http.StatusBadRequest, response)
+		}
+
+		err = bc.srv.UpdateBookLogic(uint(bookID), title, description, bookImageFile)
+		if err != nil {
+			if strings.Contains("too much", err.Error()) {
+				log.Println("error from calling booklogic data value are too much", err.Error())
+				response := helper.APIResponse("bad request, invalid data", http.StatusBadRequest, "error", nil)
+				return c.JSON(http.StatusBadRequest, response)
+			} else if strings.Contains("third party", err.Error()) {
+				log.Println("server cloudinary upload error", err.Error())
+				response := helper.APIResponse("server error", http.StatusInternalServerError, "error", nil)
+				return c.JSON(http.StatusInternalServerError, response)
+			}
+			log.Println("errors occurs in calling logic update book, not about upload", err.Error())
+			response := helper.APIResponse("server error", http.StatusInternalServerError, "error", nil)
+			return c.JSON(http.StatusInternalServerError, response)
+		}
+
+		response := helper.APIResponse("succes to update book", http.StatusOK, "succes", nil)
 		return c.JSON(http.StatusOK, response)
 	}
 }

@@ -73,3 +73,18 @@ func (bm *bookModel) GetBookByIdLogic(bookID uint) (book.Core, error) {
 
 	return result, nil
 }
+
+func (bm *bookModel) UpdateBookLogic(bookID uint, title string, description string, bookImage *multipart.FileHeader) error {
+	if err := bm.repo.UpdateBook(bookID, title, description, bookImage); err != nil {
+		if strings.Contains("too much", err.Error()) {
+			log.Println("bad request data value from user", err.Error())
+			return errors.New("bad request")
+		} else if strings.Contains("cannot", err.Error()) {
+			log.Println("failed to connect with cloud images", err.Error())
+			return errors.New("third party server down")
+		}
+		return err
+	}
+
+	return nil
+}

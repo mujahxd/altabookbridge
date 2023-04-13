@@ -83,3 +83,28 @@ func (bm *bookModel) GetBookByID(bookID uint) (book.Core, error) {
 	res.BookImage = find.BookImage
 	return res, nil
 }
+
+func (bm *bookModel) UpdateBook(bookID uint, title string, description string, bookImage *multipart.FileHeader) error {
+	var UpdateBook Book
+
+	bookurl, err := helper.Upload(bookImage)
+	if err != nil {
+		log.Println("errors from calling uploader", err.Error())
+		return errors.New("cannot upload image to server")
+	}
+
+	UpdateBook.Title = title
+	UpdateBook.Description = description
+	UpdateBook.BookImage = bookurl
+
+	// if err := bm.db.Save(&UpdateBook).Where("id = ?", bookID).Error; err != nil {
+	// 	log.Println("error from query save book in update book")
+	// 	return err
+	// }
+	if err := bm.db.Model(&Book{}).Where("id = ?", bookID).Updates(UpdateBook).Error; err != nil {
+		log.Println("error from query save book in update book")
+		return err
+	}
+
+	return nil
+}
