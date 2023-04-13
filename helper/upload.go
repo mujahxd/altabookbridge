@@ -4,22 +4,28 @@ import (
 	"context"
 	"log"
 	"mime/multipart"
-	"os"
 
 	"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
+	"github.com/mujahxd/altabookbridge/config"
 )
 
-var URLCloudService = os.Getenv("URLCLOUDRINARY")
+// var URLCloudService = os.Getenv("URLCLOUDRINARY")
 
 func Upload(image *multipart.FileHeader) (string, error) {
+	config, err := config.LoadConfig()
+	if err != nil {
+		log.Println("cannot load config url")
+		return "", err
+	}
+
 	file, err := image.Open()
 	if err != nil {
 		log.Println("error from reading file appload", err.Error())
 		return "", err
 	}
 
-	cldService, err := cloudinary.NewFromURL(URLCloudService)
+	cldService, err := cloudinary.NewFromURL(config.URLCLOURDINARY)
 	if err != nil {
 		log.Println("error on connection to cldService", err.Error())
 		return "", err
