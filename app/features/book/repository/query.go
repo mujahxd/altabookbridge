@@ -24,7 +24,7 @@ func (bm *bookModel) GetAllBook(offset int, limit int) ([]book.Core, error) {
 	res := []book.Core{}
 
 	if err := bm.db.Table("books").
-		Select("books.title as title, books.bookimage as book_image, books.status as status, books.user_name as username").
+		Select("title, book_image, status as status, books.user_name as username").
 		Offset(offset).
 		Limit(limit).
 		Scan(&res).Error; err != nil {
