@@ -29,7 +29,7 @@ func (h *handler) RegisterUser() echo.HandlerFunc {
 		}
 		_, err = h.service.RegisterUser(input)
 		if err != nil {
-			response := helper.APIResponse("Register account failed", http.StatusBadRequest, "error", nil)
+			response := helper.APIResponse("Register account failed", http.StatusBadRequest, "error", err.Error())
 			return c.JSON(http.StatusBadRequest, response)
 		}
 		response := helper.APIResponse("Account has been registered", http.StatusCreated, "success", nil)
