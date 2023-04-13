@@ -3,8 +3,10 @@ package repository
 import (
 	"errors"
 	"log"
+	"mime/multipart"
 
 	"github.com/mujahxd/altabookbridge/app/features/book"
+	"github.com/mujahxd/altabookbridge/helper"
 	"gorm.io/gorm"
 )
 
@@ -40,5 +42,27 @@ func (bm *bookModel) DeleteBook(username string, bookID uint) error {
 		log.Println("error in delete book")
 		return err
 	}
+	return nil
+}
+
+func (bm *bookModel) AddBook(username string, description string, title string, bookFile *multipart.FileHeader) error {
+	bookurl, err := helper.Upload(bookFile)
+	if err != nil {
+		log.Println("errors from calling uploader", err.Error())
+		return errors.New("cannot upload image to server")
+	}
+
+	var addNewBook = &Book{
+		Title:       title,
+		Description: description,
+		BookImage:   bookurl,
+		UserName:    username,
+	}
+
+	if err := bm.db.Create(addNewBook).Error; err != nil {
+		log.Println("error in creating book for add book")
+		return errors.New("cannot create book")
+	}
+
 	return nil
 }

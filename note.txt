@@ -2,3 +2,6 @@ API bookImage format binary harus diganti menjadil format url (mungkin) biar tid
 Sementara saya akan kembalikan dalam bentuk url
 delete book could be not found
 pertanyaan mas irwan
+kan belum di main, sebelum unit testing harusnya ke postman dulu. sedangkan kalau pakai virtual server maka akan betul terus. berarti harus localhost?
+
+34.68.26.8

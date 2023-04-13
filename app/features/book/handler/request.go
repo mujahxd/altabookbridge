@@ -1,7 +1,7 @@
 package handler
 
 type BookRequest struct {
-	Title       string `json:"judul"`
-	Description string `json:"tahun"`
-	BookImage   string `json:"penerbit"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	BookImage   string `json:"book_image"`
 }

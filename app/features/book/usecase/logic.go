@@ -3,6 +3,7 @@ package usecase
 import (
 	"errors"
 	"log"
+	"mime/multipart"
 	"strings"
 
 	"github.com/mujahxd/altabookbridge/app/features/book"
@@ -39,7 +40,21 @@ func (bm *bookModel) DeleteBookLogic(username string, bookID uint) error {
 			return errors.New("bad request from user")
 		}
 		log.Println("error occurs in in deletebooklogic for delete method", err.Error())
-		return errors.New("Internal server error")
+		return errors.New("internal server cloudinary error")
+	}
+
+	return nil
+}
+
+func (bm *bookModel) AddBookLogic(username string, description string, title string, bookfile *multipart.FileHeader) error {
+	if err := bm.repo.AddBook(username, description, title, bookfile); err != nil {
+		log.Println("errors occusr on add books")
+		if strings.Contains(err.Error(), "upload image") {
+			log.Println("error occurs in uploading image", err.Error())
+			return errors.New("internal server error (cloudinary)")
+		}
+
+		return errors.New("bad request")
 	}
 
 	return nil
