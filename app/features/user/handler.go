@@ -22,11 +22,15 @@ func (h *handler) RegisterUser() echo.HandlerFunc {
 		err := c.Bind(&input)
 		if err != nil {
 			c.Logger().Error("error bind: ", err.Error())
-			return c.JSON(http.StatusBadRequest, nil)
+			errors := helper.FormatError(err)
+			errorMessage := echo.Map{"errors": errors}
+			response := helper.APIResponse("Register account failed", http.StatusUnprocessableEntity, "error", errorMessage)
+			return c.JSON(http.StatusUnprocessableEntity, response)
 		}
 		user, err := h.service.RegisterUser(Core(input))
 		if err != nil {
-			return c.JSON(http.StatusBadRequest, nil)
+			response := helper.APIResponse("Register account failed", http.StatusBadRequest, "error", nil)
+			return c.JSON(http.StatusBadRequest, response)
 		}
 		response := helper.APIResponse("Account has been registered", http.StatusOK, "success", user)
 		return c.JSON(http.StatusOK, response)
