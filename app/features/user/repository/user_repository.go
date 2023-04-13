@@ -6,4 +6,6 @@ type Repository interface {
 	Save(user user.User) (user.User, error)
 	FindByUsername(username string) (user.User, error)
 	FindByID(ID int) (user.User, error)
+	Delete(username string) error
+	Update(user user.User) (user.User, error)
 }

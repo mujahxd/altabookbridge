@@ -21,7 +21,7 @@ func Upload(image *multipart.FileHeader) (string, error) {
 		return "", err
 	}
 
-	cldService, err := cloudinary.NewFromURL(config.URLCLOURDINARY)
+	cldService, err := cloudinary.NewFromURL(config.URLCLOUDINARY)
 	if err != nil {
 		log.Println("error on connection to cldService", err.Error())
 		return "", err

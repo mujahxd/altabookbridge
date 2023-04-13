@@ -11,5 +11,5 @@ type User struct {
 	Username       string `json:"username" gorm:"type:varchar(12);unique;primaryKey"`
 	Password       string `json:"password" gorm:"type:varchar(255);not null"`
 	AvatarFileName string
-	Book           []repository.Book `gorm:"foreignKey:UserName"`
+	Book           []repository.Book `gorm:"foreignKey:UserName;references:Username"`
 }

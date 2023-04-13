@@ -18,6 +18,8 @@ func NewLogic(repo repository.Repository) *logic {
 }
 
 func (l *logic) RegisterUser(input data.RegisterUserInput) (user.User, error) {
+
+	// Create new user
 	user := user.User{}
 	user.Name = input.Name
 	user.Username = input.Username
@@ -51,4 +53,26 @@ func (l *logic) Login(input data.LoginInput) (user.User, error) {
 		return user, err
 	}
 	return user, nil
+}
+
+func (l *logic) GetUserByUsername(username string) (user.User, error) {
+	user, err := l.repo.FindByUsername(username)
+	if err != nil {
+		return user, err
+	}
+
+	// cek user
+	if user.ID == 0 {
+		return user, errors.New("no user found on with that username")
+	}
+
+	return user, nil
+}
+
+func (l *logic) DeleteUser(username string) error {
+	err := l.repo.Delete(username)
+	if err != nil {
+		return err
+	}
+	return nil
 }
