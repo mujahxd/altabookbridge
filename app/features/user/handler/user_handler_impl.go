@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -49,14 +48,12 @@ func (h *handler) Login() echo.HandlerFunc {
 			errors := helper.FormatValidationError(err)
 			errorMessage := echo.Map{"errors": errors}
 			response := helper.APIResponse("Login failed", http.StatusUnprocessableEntity, "error", errorMessage)
-			log.Println(err)
 			return c.JSON(http.StatusUnprocessableEntity, response)
 		}
 		loggedinUser, err := h.service.Login(input)
 		if err != nil {
 			errorMessage := echo.Map{"errors": err.Error()}
 			response := helper.APIResponse("Login failed", http.StatusBadRequest, "error", errorMessage)
-			log.Println(err)
 			return c.JSON(http.StatusBadRequest, response)
 		}
 
@@ -64,13 +61,11 @@ func (h *handler) Login() echo.HandlerFunc {
 		if err != nil {
 			// errorMessage := echo.Map{"errors": err.Error()}
 			response := helper.APIResponse("Login failed", http.StatusBadRequest, "error", nil)
-			log.Println(err)
 			return c.JSON(http.StatusBadRequest, response)
 		}
 
 		formatter := user.FormatLoginUser(loggedinUser, token)
 		response := helper.APIResponse("Successfully loggedin", http.StatusOK, "success", formatter)
-		log.Println(err)
 		return c.JSON(http.StatusOK, response)
 	}
 }
