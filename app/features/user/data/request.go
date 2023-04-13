@@ -5,3 +5,8 @@ type RegisterUserInput struct {
 	Username string `binding:"required" json:"username"`
 	Password string `binding:"required" json:"password"`
 }
+
+type LoginInput struct {
+	Username string `binding:"required" json:"username"`
+	Password string `binding:"required" json:"password"`
+}

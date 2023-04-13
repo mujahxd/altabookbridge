@@ -20,3 +20,12 @@ func (m *model) Save(user user.Core) (user.Core, error) {
 	}
 	return user, nil
 }
+
+func (m *model) FindByUsername(username string) (user.Core, error) {
+	var user user.Core
+	err := m.db.Where("username = ?", username).Find(&user).Error
+	if err != nil {
+		return user, err
+	}
+	return user, nil
+}

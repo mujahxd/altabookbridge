@@ -1,6 +1,9 @@
 package user
 
-import "github.com/labstack/echo/v4"
+import (
+	"github.com/labstack/echo/v4"
+	"github.com/mujahxd/altabookbridge/app/features/user/data"
+)
 
 type Core struct {
 	Name     string
@@ -10,10 +13,11 @@ type Core struct {
 
 type Repository interface {
 	Save(user Core) (Core, error)
+	FindByUsername(username string) (Core, error)
 }
 
 type UseCase interface {
-	RegisterUser(user Core) error
+	RegisterUser(input data.RegisterUserInput) (Core, error)
 }
 
 type Handler interface {

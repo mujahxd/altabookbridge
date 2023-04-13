@@ -14,8 +14,8 @@ func NewLogic(repo user.Repository) user.UseCase {
 	return &logic{repo}
 }
 
-func (l *logic) RegisterUser(user user.Core) (user.Core, error) {
-	input := data.RegisterUserInput{}
+func (l *logic) RegisterUser(input data.RegisterUserInput) (user.Core, error) {
+	user := user.Core{}
 	user.Name = input.Name
 	user.Username = input.Username
 	passwordHash, err := helper.HashPassword(input.Password)

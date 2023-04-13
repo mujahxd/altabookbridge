@@ -27,7 +27,7 @@ func (h *handler) RegisterUser() echo.HandlerFunc {
 			response := helper.APIResponse("Register account failed", http.StatusUnprocessableEntity, "error", errorMessage)
 			return c.JSON(http.StatusUnprocessableEntity, response)
 		}
-		err = h.service.RegisterUser(Core(input))
+		_, err = h.service.RegisterUser(input)
 		if err != nil {
 			response := helper.APIResponse("Register account failed", http.StatusBadRequest, "error", nil)
 			return c.JSON(http.StatusBadRequest, response)
