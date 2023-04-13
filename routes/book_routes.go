@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/mujahxd/altabookbridge/app/features/book"
+	"github.com/mujahxd/altabookbridge/config"
 )
 
 func BookRoutes(e *echo.Echo, bh book.Handler) {
@@ -13,6 +14,8 @@ func BookRoutes(e *echo.Echo, bh book.Handler) {
 	e.Use(middleware.Logger())
 
 	e.GET("/books", bh.GetAllBookHandler())
-	e.DELETE("/books", bh.DeLeteBookHandler())
-	e.POST("/books", bh.AddBookHandler())
+	e.DELETE("/books/:booksID", bh.DeLeteBookHandler(), middleware.JWT([]byte(config.TokenSecret)))
+	e.POST("/books", bh.AddBookHandler(), middleware.JWT([]byte(config.TokenSecret)))
+	e.GET("/books/:booksID", bh.GetBookByIDHandler(), middleware.JWT([]byte(config.TokenSecret)))
+	e.PUT("/books/:booksID", bh.UpdateBookHandler(), middleware.JWT([]byte(config.TokenSecret)))
 }

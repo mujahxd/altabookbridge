@@ -13,7 +13,6 @@ type Config struct {
 	DBHost        string
 	DBPort        string
 	DBName        string
-	TokenSecret   string
 	URLCLOUDINARY string
 	// CLOUDINARY_URL=cloudinary://958436536152978:DgCOQcZLn4gIJAzvOoOtL4l_ub4@dc0wgpho2
 }
@@ -25,6 +24,8 @@ func InitConfig() *Config {
 	}
 	return cnf
 }
+
+var TokenSecret string
 
 func readConfig() *Config {
 	err := godotenv.Load(".env")
@@ -38,8 +39,8 @@ func readConfig() *Config {
 	result.DBHost = os.Getenv("DBHost")
 	result.DBPort = os.Getenv("DBPort")
 	result.DBName = os.Getenv("DBName")
-	result.TokenSecret = os.Getenv("JWT_SECRET")
 	result.URLCLOUDINARY = os.Getenv("URLCLOUDINARY")
+	TokenSecret = os.Getenv("JWT_SECRET")
 
 	return result
 }

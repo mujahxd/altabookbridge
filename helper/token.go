@@ -2,19 +2,17 @@ package helper
 
 import (
 	"errors"
-	"os"
 
 	"github.com/golang-jwt/jwt"
+	"github.com/mujahxd/altabookbridge/config"
 )
-
-var SECRET_KEY = []byte(os.Getenv("JWT"))
 
 func GenerateToken(username string) (string, error) {
 	claim := jwt.MapClaims{}
 	claim["username"] = username
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
-	signedToken, err := token.SignedString(SECRET_KEY)
+	signedToken, err := token.SignedString([]byte(config.TokenSecret))
 	if err != nil {
 		return signedToken, err
 	}
@@ -28,7 +26,7 @@ func ValidateToken(encodedToken string) (*jwt.Token, error) {
 			return nil, errors.New("invalid token")
 		}
 
-		return []byte(SECRET_KEY), nil
+		return []byte(config.TokenSecret), nil
 	})
 
 	if err != nil {

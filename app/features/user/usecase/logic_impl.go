@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"errors"
+	"log"
 
 	"github.com/mujahxd/altabookbridge/app/features/user"
 	"github.com/mujahxd/altabookbridge/app/features/user/data"
@@ -41,6 +42,7 @@ func (l *logic) Login(input data.LoginInput) (user.User, error) {
 
 	user, err := l.repo.FindByUsername(username)
 	if err != nil {
+		log.Println(err)
 		return user, err
 	}
 
@@ -50,6 +52,7 @@ func (l *logic) Login(input data.LoginInput) (user.User, error) {
 
 	err = helper.VerifyPassword(user.Password, password)
 	if err != nil {
+		log.Println(err)
 		return user, err
 	}
 	return user, nil

@@ -18,16 +18,22 @@ type Handler interface {
 	GetAllBookHandler() echo.HandlerFunc
 	DeLeteBookHandler() echo.HandlerFunc
 	AddBookHandler() echo.HandlerFunc
+	GetBookByIDHandler() echo.HandlerFunc
+	UpdateBookHandler() echo.HandlerFunc
 }
 
 type UseCase interface {
 	GetAllBookLogic(offset int, limit int) ([]Core, error)
 	DeleteBookLogic(username string, bookID uint) error
 	AddBookLogic(username string, description string, title string, bookFile *multipart.FileHeader) error
+	GetBookByIdLogic(bookID uint) (Core, error)
+	UpdateBookLogic(bookID uint, title string, description string, bookImage *multipart.FileHeader) error
 }
 
 type Repository interface {
 	GetAllBook(offset int, limit int) ([]Core, error)
 	DeleteBook(username string, bookID uint) error
 	AddBook(username string, description string, title string, bookFile *multipart.FileHeader) error
+	GetBookByID(bookID uint) (Core, error)
+	UpdateBook(bookID uint, title string, description string, bookImage *multipart.FileHeader) error
 }
