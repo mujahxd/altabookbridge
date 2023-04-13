@@ -51,7 +51,7 @@ func (bc *bookController) GetAllBookHandler() echo.HandlerFunc {
 
 func (bc *bookController) DeLeteBookHandler() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		username := helper.DecodeToken(c.Get("username").(*jwt.Token))
+		username := helper.DecodeToken(c.Get("user").(*jwt.Token))
 
 		bookID, err := strconv.Atoi(c.Param("bookID"))
 		if err != nil {
@@ -76,9 +76,7 @@ func (bc *bookController) DeLeteBookHandler() echo.HandlerFunc {
 
 func (bc *bookController) AddBookHandler() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		// username := helper.DecodeToken(c.Get("username").(*jwt.Token))
-		username := c.FormValue("username")
-
+		username := helper.DecodeToken(c.Get("user").(*jwt.Token))
 		description := c.FormValue("description")
 		title := c.FormValue("title")
 
@@ -101,7 +99,7 @@ func (bc *bookController) AddBookHandler() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, response)
 		}
 
-		response := helper.APIResponse("server error", http.StatusOK, "error", nil)
+		response := helper.APIResponse("succes to create book", http.StatusOK, "error", nil)
 		return c.JSON(http.StatusOK, response)
 
 		// 	var newBook BookRequest
@@ -148,5 +146,40 @@ func (bc *bookController) AddBookHandler() echo.HandlerFunc {
 		// 	response := helper.APIResponse("succes to create file", http.StatusCreated, "succes", nil)
 		// 	return c.JSON(http.StatusCreated, response)
 		// }
+	}
+}
+
+//add
+
+func (bc *bookController) GetBookByIDHandler() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		username := helper.DecodeToken(c.Get("user").(*jwt.Token))
+		if username == "" {
+			log.Println("unauthorized finding books")
+			response := helper.APIResponse("please login first", http.StatusUnauthorized, "unathorized", nil)
+			return c.JSON(http.StatusUnauthorized, response)
+		}
+
+		bookID, err := strconv.Atoi(c.Param("booksID"))
+		if err != nil {
+			log.Println("bad request parameter booksid not valid")
+			response := helper.APIResponse("booksID not valid", http.StatusBadRequest, "failed", nil)
+			return c.JSON(http.StatusBadRequest, response)
+		}
+		result, err := bc.srv.GetBookByIdLogic(uint(bookID))
+		if err != nil {
+			log.Println("errors occurs in getting book by id calling logic", err.Error())
+			if strings.Contains(err.Error(), "exits") {
+				log.Println("errors occurs in getting book by id calling logic bad req", err.Error())
+				response := helper.APIResponse("book not found", http.StatusBadRequest, "failed", nil)
+				return c.JSON(http.StatusBadRequest, response)
+			}
+			log.Println("errors occurs in getting book by id calling logic internal server", err.Error())
+			response := helper.APIResponse("internal server error", http.StatusInternalServerError, "error", nil)
+			return c.JSON(http.StatusBadRequest, response)
+		}
+
+		response := helper.APIResponse("succes to find book by id", http.StatusOK, "succes", result)
+		return c.JSON(http.StatusOK, response)
 	}
 }

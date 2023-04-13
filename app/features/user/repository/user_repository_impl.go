@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"log"
+
 	"github.com/mujahxd/altabookbridge/app/features/user"
 	"gorm.io/gorm"
 )
@@ -25,6 +27,7 @@ func (m *model) FindByUsername(username string) (user.User, error) {
 	var user user.User
 	err := m.db.Where("username = ?", username).Find(&user).Error
 	if err != nil {
+		log.Println(err)
 		return user, err
 	}
 	return user, nil

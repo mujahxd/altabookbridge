@@ -66,3 +66,20 @@ func (bm *bookModel) AddBook(username string, description string, title string, 
 
 	return nil
 }
+
+func (bm *bookModel) GetBookByID(bookID uint) (book.Core, error) {
+	var res book.Core
+	var find Book
+
+	result := bm.db.First(&find, bookID)
+	if result.Error != nil {
+		log.Printf("error finding books with ID %d: %v", bookID, result.Error)
+		return book.Core{}, errors.New("error finding books")
+	}
+
+	res.Username = find.UserName
+	res.Title = find.Title
+	res.Description = find.Description
+	res.BookImage = find.BookImage
+	return res, nil
+}

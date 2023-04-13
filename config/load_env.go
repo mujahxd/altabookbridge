@@ -1,7 +1,10 @@
 package config
 
 import (
+	"log"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 type Config struct {
@@ -22,20 +25,20 @@ func InitConfig() *Config {
 	}
 	return cnf
 }
-
+var Secret string
 func readConfig() *Config {
-	// err := godotenv.Load(".env")
-	// if err != nil {
-	// 	log.Fatal("Cannot read config variable")
-	// 	return nil
-	// }
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatal("Cannot read config variable")
+		return nil
+	}
 	var result = new(Config)
 	result.DBUser = os.Getenv("DBUser")
 	result.DBPassword = os.Getenv("DBPassword")
 	result.DBHost = os.Getenv("DBHost")
 	result.DBPort = os.Getenv("DBPort")
 	result.DBName = os.Getenv("DBName")
-	result.TokenSecret = os.Getenv("JWT_SECRET")
+	Secret = os.Getenv("JWT")
 	result.URLCLOURDINARY = os.Getenv("URLCLOUDRINARY")
 
 	return result

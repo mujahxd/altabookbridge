@@ -59,3 +59,17 @@ func (bm *bookModel) AddBookLogic(username string, description string, title str
 
 	return nil
 }
+
+func (bm *bookModel) GetBookByIdLogic(bookID uint) (book.Core, error) {
+	result, err := bm.repo.GetBookByID(bookID)
+	if err != nil {
+		log.Println("errors occurs in getting book by id", err.Error())
+		if strings.Contains(err.Error(), "finding") {
+			return book.Core{}, errors.New("finding book error from gorm")
+		}
+		log.Println("errors occurs in getting book by id (bad request)", err.Error())
+		return book.Core{}, errors.New("books doesnt exist")
+	}
+
+	return result, nil
+}
