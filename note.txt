@@ -10,3 +10,9 @@ description API get books/:id
 
 
 cara cek file yang ada di url sudah ada apa belum
+
+
+id yang sudah terhapus malah 500
+
+
+masalah utama adalah salah perencanaan dimana bookid tidak pernah diberikan ke front end.

@@ -99,7 +99,7 @@ func (bc *bookController) AddBookHandler() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, response)
 		}
 
-		response := helper.APIResponse("succes to create book", http.StatusOK, "error", nil)
+		response := helper.APIResponse("succes to create book", http.StatusOK, "succes", nil)
 		return c.JSON(http.StatusOK, response)
 
 		// 	var newBook BookRequest
