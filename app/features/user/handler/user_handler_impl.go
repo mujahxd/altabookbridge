@@ -1,18 +1,19 @@
-package user
+package handler
 
 import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"github.com/mujahxd/altabookbridge/app/features/user/data"
+	"github.com/mujahxd/altabookbridge/app/features/user/usecase"
 	"github.com/mujahxd/altabookbridge/helper"
 )
 
 type handler struct {
-	service UseCase
+	service usecase.UseCase
 }
 
-func NewHandler(service UseCase) *handler {
+func NewHandler(service usecase.UseCase) *handler {
 	return &handler{service}
 }
 
@@ -27,7 +28,7 @@ func (h *handler) RegisterUser() echo.HandlerFunc {
 			response := helper.APIResponse("Register account failed", http.StatusUnprocessableEntity, "error", errorMessage)
 			return c.JSON(http.StatusUnprocessableEntity, response)
 		}
-		err = h.service.RegisterUser(Core(input))
+		err = h.service.RegisterUser(input)
 		if err != nil {
 			response := helper.APIResponse("Register account failed", http.StatusBadRequest, "error", nil)
 			return c.JSON(http.StatusBadRequest, response)

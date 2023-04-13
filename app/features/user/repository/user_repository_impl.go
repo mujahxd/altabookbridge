@@ -9,11 +9,11 @@ type model struct {
 	db *gorm.DB
 }
 
-func NewModel(db *gorm.DB) user.Repository {
+func NewModel(db *gorm.DB) *model {
 	return &model{db}
 }
 
-func (m *model) Save(user user.Core) (user.Core, error) {
+func (m *model) Save(user user.User) (user.User, error) {
 	err := m.db.Create(&user).Error
 	if err != nil {
 		return user, err
