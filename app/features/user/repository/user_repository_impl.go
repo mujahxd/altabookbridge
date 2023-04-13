@@ -38,11 +38,3 @@ func (m *model) FindByID(ID int) (user.User, error) {
 	}
 	return user, nil
 }
-
-func (m *model) Update(user user.User) (user.User, error) {
-	err := m.db.Save(&user).Error
-	if err != nil {
-		return user, err
-	}
-	return user, nil
-}
