@@ -13,14 +13,22 @@ type Config struct {
 	TokenSecret string
 }
 
-func LoadConfig() (config Config, err error) {
+func InitConfig() *Config {
+	var cnf = readConfig()
+	if cnf == nil {
+		return nil
+	}
+	return cnf
+}
 
-	config.DBUser = os.Getenv("DBUser")
-	config.DBPassword = os.Getenv("DBPassword")
-	config.DBHost = os.Getenv("DBHost")
-	config.DBPort = os.Getenv("DBPort")
-	config.DBName = os.Getenv("DBName")
-	config.TokenSecret = os.Getenv("JWT_SECRET")
+func readConfig() *Config {
+	var result = new(Config)
+	result.DBUser = os.Getenv("DBUser")
+	result.DBPassword = os.Getenv("DBPassword")
+	result.DBHost = os.Getenv("DBHost")
+	result.DBPort = os.Getenv("DBPort")
+	result.DBName = os.Getenv("DBName")
+	result.TokenSecret = os.Getenv("JWT_SECRET")
 
-	return config, nil
+	return result
 }
