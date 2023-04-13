@@ -24,7 +24,7 @@ func (h *handler) RegisterUser() echo.HandlerFunc {
 			c.Logger().Error("error bind: ", err.Error())
 			errors := helper.FormatValidationError(err)
 			errorMessage := echo.Map{"errors": errors}
-			response := helper.APIResponse("Register account failed", http.StatusUnprocessableEntity, "error", errorMessage)
+			response := helper.APIResponse("Register account failed, field must be filled", http.StatusUnprocessableEntity, "error", errorMessage)
 			return c.JSON(http.StatusUnprocessableEntity, response)
 		}
 		_, err = h.service.RegisterUser(input)
