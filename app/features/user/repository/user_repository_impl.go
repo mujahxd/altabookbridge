@@ -9,11 +9,11 @@ type model struct {
 	db *gorm.DB
 }
 
-func NewModel(db *gorm.DB) user.Repository {
+func NewModel(db *gorm.DB) *model {
 	return &model{db}
 }
 
-func (m *model) Save(user user.Core) (user.Core, error) {
+func (m *model) Save(user user.User) (user.User, error) {
 	err := m.db.Create(&user).Error
 	if err != nil {
 		return user, err
@@ -21,8 +21,8 @@ func (m *model) Save(user user.Core) (user.Core, error) {
 	return user, nil
 }
 
-func (m *model) FindByUsername(username string) (user.Core, error) {
-	var user user.Core
+func (m *model) FindByUsername(username string) (user.User, error) {
+	var user user.User
 	err := m.db.Where("username = ?", username).Find(&user).Error
 	if err != nil {
 		return user, err

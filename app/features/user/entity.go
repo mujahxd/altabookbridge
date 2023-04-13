@@ -1,25 +1,14 @@
 package user
 
 import (
-	"github.com/labstack/echo/v4"
-	"github.com/mujahxd/altabookbridge/app/features/user/data"
+	"github.com/mujahxd/altabookbridge/app/features/book/repository"
+	"gorm.io/gorm"
 )
 
-type Core struct {
-	Name     string
-	Username string
-	Password string
-}
-
-type Repository interface {
-	Save(user Core) (Core, error)
-	FindByUsername(username string) (Core, error)
-}
-
-type UseCase interface {
-	RegisterUser(input data.RegisterUserInput) (Core, error)
-}
-
-type Handler interface {
-	RegisterUser() echo.HandlerFunc
+type User struct {
+	gorm.Model
+	Name     string            `json:"name" gorm:"type:varchar(45);not null"`
+	Username string            `json:"username" gorm:"type:varchar(12);unique;primaryKey"`
+	Password string            `json:"password" gorm:"type:varchar(12);not null"`
+	Book     []repository.Book `gorm:"foreignKey:UserName"`
 }

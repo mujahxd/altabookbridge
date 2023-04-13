@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/mujahxd/altabookbridge/app/features/user"
+	"github.com/mujahxd/altabookbridge/app/features/user/handler"
 	"github.com/mujahxd/altabookbridge/app/features/user/repository"
 	"github.com/mujahxd/altabookbridge/app/features/user/usecase"
 	"github.com/mujahxd/altabookbridge/config"
@@ -20,7 +20,7 @@ func main() {
 
 	userModel := repository.NewModel(db)
 	userUsecase := usecase.NewLogic(userModel)
-	userHandler := user.NewHandler(userUsecase)
+	userHandler := handler.NewHandler(userUsecase)
 
 	routes.InitRoute(e, userHandler)
 
