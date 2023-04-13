@@ -38,3 +38,21 @@ func (m *model) FindByID(ID int) (user.User, error) {
 	}
 	return user, nil
 }
+
+func (m *model) Update(user user.User) (user.User, error) {
+
+	err := m.db.Save(&user).Error
+	if err != nil {
+		return user, err
+	}
+	return user, nil
+}
+
+func (m *model) Delete(username string) error {
+	var user user.User
+	err := m.db.Where("username = ?", username).Delete(&user).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}

@@ -8,4 +8,6 @@ import (
 type UseCase interface {
 	RegisterUser(input data.RegisterUserInput) (user.User, error)
 	Login(input data.LoginInput) (user.User, error)
+	GetUserByUsername(username string) (user.User, error)
+	DeleteUser(username string) error
 }
