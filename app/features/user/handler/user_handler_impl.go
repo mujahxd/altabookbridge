@@ -34,6 +34,7 @@ func (h *handler) RegisterUser() echo.HandlerFunc {
 			response := helper.APIResponse("Register account failed", http.StatusBadRequest, "error", nil)
 			return c.JSON(http.StatusBadRequest, response)
 		}
+
 		response := helper.APIResponse("Account has been registered", http.StatusCreated, "success", nil)
 		return c.JSON(http.StatusCreated, response)
 	}
@@ -55,7 +56,15 @@ func (h *handler) Login() echo.HandlerFunc {
 			response := helper.APIResponse("Login failed", http.StatusBadRequest, "error", errorMessage)
 			return c.JSON(http.StatusBadRequest, response)
 		}
-		formatter := user.FormatLoginUser(loggedinUser, "token")
+
+		token, err := helper.GenerateToken(loggedinUser.Username)
+		if err != nil {
+			// errorMessage := echo.Map{"errors": err.Error()}
+			response := helper.APIResponse("Login failed", http.StatusBadRequest, "error", nil)
+			return c.JSON(http.StatusBadRequest, response)
+		}
+
+		formatter := user.FormatLoginUser(loggedinUser, token)
 		response := helper.APIResponse("Successfully loggedin", http.StatusOK, "success", formatter)
 		return c.JSON(http.StatusOK, response)
 	}
