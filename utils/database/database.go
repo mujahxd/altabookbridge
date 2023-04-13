@@ -18,6 +18,5 @@ func ConnectionDB(config *config.Config) *gorm.DB {
 		log.Fatal(err.Error())
 	}
 
-	fmt.Println("Connected Successfully to the database")
 	return db
 }

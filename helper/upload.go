@@ -13,11 +13,7 @@ import (
 // var URLCloudService = os.Getenv("URLCLOUDRINARY")
 
 func Upload(image *multipart.FileHeader) (string, error) {
-	config, err := config.LoadConfig()
-	if err != nil {
-		log.Println("cannot load config url")
-		return "", err
-	}
+	config := config.InitConfig()
 
 	file, err := image.Open()
 	if err != nil {
