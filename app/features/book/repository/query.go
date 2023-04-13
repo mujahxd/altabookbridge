@@ -23,7 +23,11 @@ func New(d *gorm.DB) book.Repository {
 func (bm *bookModel) GetAllBook(offset int, limit int) ([]book.Core, error) {
 	res := []book.Core{}
 
-	if err := bm.db.Table("books").Select("books.title as title, books.bookimage as book_image, books.status as status, books.username as username").Scan(&res).Error; err != nil {
+	if err := bm.db.Table("books").
+		Select("books.title as title, books.bookimage as book_image, books.status as status, books.username as username").
+		Offset(offset).
+		Limit(limit).
+		Scan(&res).Error; err != nil {
 		log.Println("terjadi error saat select book", err.Error())
 		return nil, err
 	}
