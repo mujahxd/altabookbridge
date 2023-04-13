@@ -22,6 +22,11 @@ func InitConfig() *Config {
 }
 
 func readConfig() *Config {
+	// err := godotenv.Load(".env")
+	// if err != nil {
+	// 	log.Fatal("Cannot read config variable")
+	// 	return nil
+	// }
 	var result = new(Config)
 	result.DBUser = os.Getenv("DBUser")
 	result.DBPassword = os.Getenv("DBPassword")

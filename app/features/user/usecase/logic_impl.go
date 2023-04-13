@@ -43,7 +43,7 @@ func (l *logic) Login(input data.LoginInput) (user.User, error) {
 	}
 
 	if user.ID == 0 {
-		return user, errors.New("no user found on that email")
+		return user, errors.New("no user found on that username")
 	}
 
 	err = helper.VerifyPassword(user.Password, password)
@@ -51,4 +51,17 @@ func (l *logic) Login(input data.LoginInput) (user.User, error) {
 		return user, err
 	}
 	return user, nil
+}
+
+func (l *logic) SaveAvatar(ID int, fileLocation string) (user.User, error) {
+	user, err := l.repo.FindByID(ID)
+	if err != nil {
+		return user, err
+	}
+	user.AvatarFileName = fileLocation
+	updatedUser, err := l.repo.Update(user)
+	if err != nil {
+		return updatedUser, err
+	}
+	return updatedUser, nil
 }

@@ -29,3 +29,20 @@ func (m *model) FindByUsername(username string) (user.User, error) {
 	}
 	return user, nil
 }
+
+func (m *model) FindByID(ID int) (user.User, error) {
+	var user user.User
+	err := m.db.Where("id = ?", ID).Find(&user).Error
+	if err != nil {
+		return user, err
+	}
+	return user, nil
+}
+
+func (m *model) Update(user user.User) (user.User, error) {
+	err := m.db.Save(&user).Error
+	if err != nil {
+		return user, err
+	}
+	return user, nil
+}

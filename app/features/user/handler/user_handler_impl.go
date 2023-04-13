@@ -42,7 +42,7 @@ func (h *handler) RegisterUser() echo.HandlerFunc {
 func (h *handler) Login() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var input data.LoginInput
-		err := c.Bind(input)
+		err := c.Bind(&input)
 		if err != nil {
 			errors := helper.FormatValidationError(err)
 			errorMessage := echo.Map{"errors": errors}
