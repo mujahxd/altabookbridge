@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"errors"
+
 	"github.com/mujahxd/altabookbridge/app/features/user"
 	"github.com/mujahxd/altabookbridge/app/features/user/data"
 	"github.com/mujahxd/altabookbridge/app/features/user/repository"
@@ -30,4 +32,23 @@ func (l *logic) RegisterUser(input data.RegisterUserInput) (user.User, error) {
 	}
 	return newUser, nil
 
+}
+func (l *logic) Login(input data.LoginInput) (user.User, error) {
+	username := input.Username
+	password := input.Password
+
+	user, err := l.repo.FindByUsername(username)
+	if err != nil {
+		return user, err
+	}
+
+	if user.ID == 0 {
+		return user, errors.New("no user found on that email")
+	}
+
+	err = helper.VerifyPassword(user.Password, password)
+	if err != nil {
+		return user, err
+	}
+	return user, nil
 }

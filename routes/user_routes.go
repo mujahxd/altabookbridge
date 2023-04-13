@@ -7,4 +7,5 @@ import (
 
 func InitRoute(e *echo.Echo, h handler.Handler) {
 	e.POST("/users", h.RegisterUser())
+	e.POST("/login", h.Login())
 }
