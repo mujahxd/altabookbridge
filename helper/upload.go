@@ -34,8 +34,8 @@ func Upload(image *multipart.FileHeader) (string, error) {
 		return "", err
 	}
 
-	book_image := responseCloud.URL
+	fileImage := responseCloud.URL
 
 	file.Close()
-	return book_image, nil
+	return fileImage, nil
 }

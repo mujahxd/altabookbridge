@@ -15,4 +15,7 @@ func InitRoute(e *echo.Echo, h handler.Handler) {
 	e.POST("/login", h.Login())
 	e.GET("/users", h.GetProfileUser())
 	e.DELETE("/users", h.DeleteActiveUser())
+	e.PUT("/users", h.UpdateProfileUser())
+	// e.GET("/users/books", h.GetAllUserBooks())
+
 }

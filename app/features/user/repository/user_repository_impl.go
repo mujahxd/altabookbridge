@@ -1,7 +1,12 @@
 package repository
 
 import (
+	"errors"
+	"log"
+	"mime/multipart"
+
 	"github.com/mujahxd/altabookbridge/app/features/user"
+	"github.com/mujahxd/altabookbridge/helper"
 	"gorm.io/gorm"
 )
 
@@ -39,13 +44,23 @@ func (m *model) FindByID(ID int) (user.User, error) {
 	return user, nil
 }
 
-func (m *model) Update(user user.User) (user.User, error) {
-
-	err := m.db.Save(&user).Error
+func (m *model) Update(username string, name string, password string, avatar *multipart.FileHeader) error {
+	var updatedUser user.User
+	avatarurl, err := helper.Upload(avatar)
 	if err != nil {
-		return user, err
+		log.Println("errors from calling uploader", err.Error())
+		return errors.New("cannot upload image to server")
 	}
-	return user, nil
+
+	updatedUser.Name = name
+	updatedUser.Password = password
+	updatedUser.AvatarFileName = avatarurl
+	err = m.db.Model(&user.User{}).Where("username = ?", username).Updates(updatedUser).Error
+	if err != nil {
+		return err
+	}
+	return nil
+
 }
 
 func (m *model) Delete(username string) error {
