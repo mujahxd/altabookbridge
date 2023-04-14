@@ -8,5 +8,5 @@ type Handler interface {
 	DeleteActiveUser() echo.HandlerFunc
 	GetProfileUser() echo.HandlerFunc
 	UpdateProfileUser() echo.HandlerFunc
-	GetAllUserBooks() echo.HandlerFunc
+	// GetAllUserBooks() echo.HandlerFunc
 }

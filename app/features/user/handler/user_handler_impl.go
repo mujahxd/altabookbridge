@@ -8,7 +8,6 @@ import (
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 	"github.com/mujahxd/altabookbridge/app/features/user"
-	"github.com/mujahxd/altabookbridge/app/features/user/auth"
 	"github.com/mujahxd/altabookbridge/app/features/user/data"
 	"github.com/mujahxd/altabookbridge/app/features/user/usecase"
 	"github.com/mujahxd/altabookbridge/helper"
@@ -16,11 +15,10 @@ import (
 
 type handler struct {
 	userService usecase.UseCase
-	authService auth.Service
 }
 
-func NewHandler(userService usecase.UseCase, authService auth.Service) *handler {
-	return &handler{userService, authService}
+func NewHandler(userService usecase.UseCase) *handler {
+	return &handler{userService}
 }
 
 func (h *handler) RegisterUser() echo.HandlerFunc {
