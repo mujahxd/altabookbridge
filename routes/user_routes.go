@@ -3,12 +3,10 @@ package routes
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/mujahxd/altabookbridge/app/features/user/auth"
 	"github.com/mujahxd/altabookbridge/app/features/user/handler"
-	"github.com/mujahxd/altabookbridge/app/features/user/usecase"
 )
 
-func InitRoute(e *echo.Echo, h handler.Handler, authService auth.Service, userService usecase.UseCase) {
+func InitRoute(e *echo.Echo, h handler.Handler) {
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.CORS())
 	e.Use(middleware.Logger())
