@@ -7,9 +7,9 @@ import (
 
 type User struct {
 	gorm.Model
-	Name           string `json:"name" gorm:"type:varchar(45);not null"`
-	Username       string `json:"username" gorm:"type:varchar(12);unique;primaryKey"`
-	Password       string `json:"password" gorm:"type:varchar(255);not null"`
-	AvatarFileName string
+	Name           string            `json:"name" gorm:"type:varchar(45);not null"`
+	Username       string            `json:"username" gorm:"type:varchar(12);unique;primaryKey"`
+	Password       string            `json:"password" gorm:"type:varchar(255);not null"`
+	AvatarFileName string            `json:"avatar" gorm:"type:varchar(255)"`
 	Book           []repository.Book `gorm:"foreignKey:UserName;references:Username"`
 }
