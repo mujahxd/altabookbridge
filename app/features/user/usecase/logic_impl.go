@@ -3,6 +3,8 @@ package usecase
 import (
 	"errors"
 	"log"
+	"mime/multipart"
+	"strings"
 
 	"github.com/mujahxd/altabookbridge/app/features/user"
 	"github.com/mujahxd/altabookbridge/app/features/user/data"
@@ -36,26 +38,24 @@ func (l *logic) RegisterUser(input data.RegisterUserInput) (user.User, error) {
 	return newUser, nil
 
 }
+
 func (l *logic) Login(input data.LoginInput) (user.User, error) {
-	username := input.Username
-	password := input.Password
-
-	user, err := l.repo.FindByUsername(username)
+	loginUser, err := l.repo.FindByUsername(input.Username)
 	if err != nil {
 		log.Println(err)
-		return user, err
+		return user.User{}, err
 	}
 
-	if user.ID == 0 {
-		return user, errors.New("no user found on that username")
+	if loginUser.ID == 0 {
+		return user.User{}, errors.New("no user found with that username")
 	}
 
-	err = helper.VerifyPassword(user.Password, password)
-	if err != nil {
+	if err := helper.VerifyPassword(loginUser.Password, input.Password); err != nil {
 		log.Println(err)
-		return user, err
+		return user.User{}, err
 	}
-	return user, nil
+
+	return loginUser, nil
 }
 
 func (l *logic) GetUserByUsername(username string) (user.User, error) {
@@ -75,6 +75,22 @@ func (l *logic) GetUserByUsername(username string) (user.User, error) {
 func (l *logic) DeleteUser(username string) error {
 	err := l.repo.Delete(username)
 	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (l *logic) UpdateUser(username string, name string, password string, avatar *multipart.FileHeader) error {
+
+	err := l.repo.Update(username, name, password, avatar)
+	if err != nil {
+		if strings.Contains("too much", err.Error()) {
+			log.Println("bad request data value from user", err.Error())
+			return errors.New("bad request")
+		} else if strings.Contains("cannot", err.Error()) {
+			log.Println("failed to connect with cloud images", err.Error())
+			return errors.New("third party server down")
+		}
 		return err
 	}
 	return nil
